@@ -7,6 +7,6 @@
 (test
   "feature 1-1"
   '((method "GET") (path "/"))
-  (lambda () (parse-first-line "GET / HTTP/1.1\n" )))
+  (lambda () (parse-first-line "GET / HTTP/1.1\r\n" )))
 
 (test-end :exit-on-failure #t)
