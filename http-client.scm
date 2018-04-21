@@ -13,7 +13,7 @@
   (display resp))
 
 (define (handler sock)
-  (let ((recv (socket-recv sock 1023)))
+  (let ((recv (socket-recv sock 1024)))
     (if (<= (string-length recv) 0)
       (begin
         (socket-close sock)
