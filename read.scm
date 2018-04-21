@@ -1,4 +1,4 @@
-(let ((p (open-input-file "request.txt")))
+(let ((p (open-input-file "txt/request.txt")))
   (let loop ((ls1 '()) (c (read-char p)))
     (if (eof-object? c)
       (begin
