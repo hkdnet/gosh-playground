@@ -1,9 +1,9 @@
 (use gauche.net)
 
 (define (parse-first-line line)
-  (let ((tmp (string-split line " " 3)))
-    (let ((method (car tmp)) (path (cdr tmp)))
-      `(`('method ,method) `('path ,path)))))
+  (let ((tmp (string-split line " ")))
+    (let ((method (car tmp)) (path (car (cdr tmp))))
+      `((method ,method) (path ,path)))))
 
 (define (parse-header-line line)
   string-split line ": " 2)
