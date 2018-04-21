@@ -1,8 +1,11 @@
 (use gauche.net)
 
+(define (parse-header-line line)
+  string-split header ": " 2)
+
 (define (parse-header header)
   (let ((lines (string-split header "\r\n")))
-    (fold cons '() lines)))
+    (fold cons '() (map parse-header-line lines))))
 
 (define (parse-body body)
   body)
