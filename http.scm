@@ -6,7 +6,7 @@
       '(('method method) ('path path)))))
 
 (define (parse-header-line line)
-  string-split header ": " 2)
+  string-split line ": " 2)
 
 (define (parse-header header)
   (let ((lines (string-split header "\r\n")))
