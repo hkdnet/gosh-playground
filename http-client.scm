@@ -1,15 +1,13 @@
 (use gauche.net)
 
 (define (read-from-file filename)
-  (let ((p (open-input-file filename)))
-    (let loop ((ls1 '()) (c (read-char p)))
-      (if (eof-object? c)
-        (begin
-          (close-input-port p)
+  (with-input-from-file filename
+    (lambda ()
+      (let loop ((ls1 '()) (c (read-char)))
+        (if (eof-object? c)
           (let ((str (list->string (reverse ls1))))
-            str))
-        (loop (cons c ls1) (read-char p)))))
-  )
+            str)
+          (loop (cons c ls1) (read-char)))))))
 
 (define (main args)
   (receive (_ filename) (apply values args)
