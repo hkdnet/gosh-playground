@@ -13,9 +13,8 @@
   (handler sock))
 
 (define (main args)
-  (display "1\n")
   (display args)(newline)
-  (display "2\n")
   (let ((server-sock (make-server-socket `inet 5000)))
+    (display "waiting...\n")
     (let ((sock (socket-accept server-sock)))
       (handler sock))))
