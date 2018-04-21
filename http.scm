@@ -1,0 +1,21 @@
+(use gauche.net)
+
+(define (handler sock)
+  (let ((recv (socket-recv sock 1024)))
+    (display "written!\n")
+    (if (<= (string-length recv) 0)
+      (begin
+        (display "exit\n")
+        (socket-close sock)
+        (exit)))
+    (display recv)(newline)
+    (socket-send sock recv))
+  (handler sock))
+
+(define (main args)
+  (display "1\n")
+  (display args)(newline)
+  (display "2\n")
+  (let ((server-sock (make-server-socket `inet 5000)))
+    (let ((sock (socket-accept server-sock)))
+      (handler sock))))
