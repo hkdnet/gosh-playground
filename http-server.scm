@@ -21,7 +21,7 @@
       (let ((header (car arr2)) (body (cdr arr2)))
         `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body))))))
 
-(define (build-response headers body)
+(define (build-response first-line headers body)
   "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nHello\r\n")
 
 (define (handler sock)
@@ -33,6 +33,6 @@
         (exit)))
     (let ((parsed (parse-request recv)))
       (let ((first-line (car parsed)) (headers (cdr parsed)) (body (cddr parsed)))
-        (let ((resp (build-response headers body)))
+        (let ((resp (build-response first-line headers body)))
           (socket-send sock resp)))))
   (handler sock))
