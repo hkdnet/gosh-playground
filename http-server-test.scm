@@ -4,10 +4,17 @@
 (load "./http-server")
 
 (test-section "parse-first-line")
-(test
-  "第一行目のパース"
-  '((method "GET") (path "/"))
-  (lambda () (parse-first-line "GET / HTTP/1.1\r\n" )))
+(let ((parsed (parse-first-line "GET / HTTP/1.1\r\n")))
+  (test "type"
+    #t
+    (lambda () (first-line? parsed)))
+  (test "method"
+    "GET"
+    (lambda () (method parsed)))
+  (test "path"
+    "/"
+    (lambda () (path parsed)))
+  )
 
 (test-section "parse-header-line")
 (test
