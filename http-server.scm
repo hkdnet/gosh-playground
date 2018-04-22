@@ -33,7 +33,6 @@
         (exit)))
     (let ((parsed (parse-request recv)))
       (let ((first-line (car parsed)) (headers (cdr parsed)) (body (cddr parsed)))
-        (display first-line)
         (let ((resp (build-response headers body)))
           (socket-send sock resp)))))
   (handler sock))
