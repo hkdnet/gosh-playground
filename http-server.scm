@@ -34,7 +34,7 @@
   (let ((method (method first-line)))
     (if (string=? method "GET")
       "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nGello\r\n"
-      "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nHello\r\n")))
+      "HTTP/1.1 400 Bad Request\r\nContent-Length: 22\r\n\r\nNot supported method\r\n")))
 
 (define (handler sock)
   (let ((recv (socket-recv sock 1024)))
