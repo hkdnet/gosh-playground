@@ -37,9 +37,10 @@
   (build-path (current-directory) "public"))
 
 (define (create-file-content-response path)
-  (let ((text (read-from-file (build-path public-path #"./~path")))) ; ディレクトリトラバーサル
-    (let ((content-length (string-length text)))
-      #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text")))
+  (let ((file-path (build-path public-path #"./~path"))) ; ディレクトリトラバーサル
+    (let ((text (read-from-file file-path)))
+      (let ((content-length (string-length text)))
+        #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text"))))
 
 (define (build-response first-line headers body)
   (let ((method (method first-line)))
