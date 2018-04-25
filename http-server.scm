@@ -3,8 +3,6 @@
 (use file.util)
 (use srfi-13)
 
-(load "./file-reader.scm")
-
 (define-record-type
   first-line
   (build-first-line method path)
@@ -43,7 +41,7 @@
 (define (create-file-content-response path)
   (let ((file-path (build-path public-path #"./~path")))
     (if (public-dir? file-path)
-      (let ((text (read-from-file file-path)))
+      (let ((text (file->string file-path)))
         (let ((content-length (string-length text)))
           #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text"))
       "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n")))
