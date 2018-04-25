@@ -41,7 +41,7 @@
   (string-prefix? public-path path))
 
 (define (create-file-content-response path)
-  (let ((file-path (build-path public-path #"./~path"))) ; ディレクトリトラバーサル
+  (let ((file-path (build-path public-path #"./~path")))
     (if (public-dir? file-path)
       (let ((text (read-from-file file-path)))
         (let ((content-length (string-length text)))
