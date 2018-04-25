@@ -33,8 +33,11 @@
         (let ((header (car arr2)) (body (cdr arr2)))
           `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body)))))))
 
+(define public-path
+  (build-path (current-directory) "public"))
+
 (define (create-file-content-response path)
-  (let ((text (read-from-file (build-path "public" #"./~path")))) ; ディレクトリトラバーサル
+  (let ((text (read-from-file (build-path public-path #"./~path")))) ; ディレクトリトラバーサル
     (let ((content-length (string-length text)))
       #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text")))
 
