@@ -31,7 +31,10 @@
           `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body)))))))
 
 (define (build-response first-line headers body)
-  "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nHello\r\n")
+  (let ((method (method first-line)))
+    (if (string=? method "GET")
+      "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nGello\r\n"
+      "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nHello\r\n")))
 
 (define (handler sock)
   (let ((recv (socket-recv sock 1024)))
