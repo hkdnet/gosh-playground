@@ -1,6 +1,8 @@
 (use gauche.record)
 (use gauche.net)
 
+(load "./file-reader.scm")
+
 (define-record-type
   first-line
   (build-first-line method path)
@@ -30,10 +32,16 @@
         (let ((header (car arr2)) (body (cdr arr2)))
           `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body)))))))
 
+(define (create-file-content-response path)
+  (let ((text (read-from-file (string-join `("public" ,path) ""))))
+    (let ((content-length (string-length text)))
+      #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text")))
+
 (define (build-response first-line headers body)
   (let ((method (method first-line)))
     (if (string=? method "GET")
-      "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nGello\r\n"
+      (let ((path (path first-line)))
+        (create-file-content-response path))
       "HTTP/1.1 400 Bad Request\r\nContent-Length: 22\r\n\r\nNot supported method\r\n")))
 
 (define (handler sock)
