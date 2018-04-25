@@ -1,5 +1,6 @@
 (use gauche.record)
 (use gauche.net)
+(use file.util)
 
 (load "./file-reader.scm")
 
@@ -33,7 +34,7 @@
           `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body)))))))
 
 (define (create-file-content-response path)
-  (let ((text (read-from-file (string-join `("public" ,path) "")))) ; ディレクトリトラバーサル
+  (let ((text (read-from-file (build-path "public" #"./~path")))) ; ディレクトリトラバーサル
     (let ((content-length (string-length text)))
       #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text")))
 
