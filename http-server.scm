@@ -24,10 +24,11 @@
   body)
 
 (define (parse-request request)
-  (let ((arr (string-split request "\r\n\r\n" 2)))
-    (let ((first-line (car arr)) (arr2 (cdr arr)))
-      (let ((header (car arr2)) (body (cdr arr2)))
-        `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body))))))
+  (let ((complete-request (string-incomplete->complete request)))
+    (let ((arr (string-split complete-request "\r\n\r\n" 2)))
+      (let ((first-line (car arr)) (arr2 (cdr arr)))
+        (let ((header (car arr2)) (body (cdr arr2)))
+          `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body)))))))
 
 (define (build-response first-line headers body)
   "HTTP/1.1 200 OK\r\nContent-Length: 7\r\n\r\nHello\r\n")
