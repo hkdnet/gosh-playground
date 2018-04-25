@@ -1,6 +1,7 @@
 (use gauche.record)
 (use gauche.net)
 (use file.util)
+(use srfi-13)
 
 (load "./file-reader.scm")
 
@@ -36,11 +37,16 @@
 (define public-path
   (build-path (current-directory) "public"))
 
+(define (public-dir? path)
+  (string-prefix? public-path path))
+
 (define (create-file-content-response path)
   (let ((file-path (build-path public-path #"./~path"))) ; ディレクトリトラバーサル
-    (let ((text (read-from-file file-path)))
-      (let ((content-length (string-length text)))
-        #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text"))))
+    (if (public-dir? file-path)
+      (let ((text (read-from-file file-path)))
+        (let ((content-length (string-length text)))
+          #"HTTP/1.1 200 OK\r\nContent-Length: ~content-length\r\n\r\n~text"))
+      "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n")))
 
 (define (build-response first-line headers body)
   (let ((method (method first-line)))
