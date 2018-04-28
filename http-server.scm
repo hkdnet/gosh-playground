@@ -19,8 +19,7 @@
   (string-split line ": " 2))
 
 (define (parse-header header)
-  (let ((lines (string-split header "\r\n")))
-    (reverse (fold cons '() (map parse-header-line lines)))))
+  (reverse (fold cons '() (map parse-header-line header))))
 
 (define (parse-body body)
   body)
@@ -28,9 +27,9 @@
 (define (parse-request request)
   (let ((complete-request (string-incomplete->complete request)))
     (let ((arr (string-split complete-request "\r\n\r\n" 2)))
-      (let ((first-line (car arr)) (arr2 (cdr arr)))
-        (let ((header (car arr2)) (body (cdr arr2)))
-          `(,(parse-first-line first-line) ,(parse-header header) ,(parse-body body)))))))
+      (let ((header-lines (string-split (car arr) "\r\n")))
+        (let ((first-line (car header-lines)) (header (cdr header-lines)))
+          `(,(parse-first-line first-line) ,(parse-header header)))))))
 
 (define public-path
   (build-path (current-directory) "public"))
