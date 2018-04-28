@@ -3,17 +3,18 @@
 (use file.util)
 (use srfi-13)
 
-(define-record-type
-  first-line
-  (build-first-line method path)
-  #t
-  (method method)
-  (path path))
+(define-class <first-line> ()
+  ((method :init-keyword :method)
+   (path :init-keyword :path)))
+
+(define-method object-equal? ((a <first-line>) (b <first-line>))
+  (and (equal? (slot-ref a 'method) (slot-ref b 'method))
+       (equal? (slot-ref a 'path) (slot-ref b 'path))))
 
 (define (parse-first-line line)
   (let ((tmp (string-split line " " 3)))
     (let ((method (car tmp)) (path (car (cdr tmp))))
-      (build-first-line method path))))
+      (make <first-line> :method method :path path))))
 
 (define (parse-header-line line)
   (string-split line ": " 2))
@@ -46,11 +47,9 @@
       "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n")))
 
 (define (build-response first-line headers body)
-  (let ((method (method first-line)))
-    (if (string=? method "GET")
-      (let ((path (path first-line)))
-        (create-file-content-response path))
-      "HTTP/1.1 400 Bad Request\r\nContent-Length: 22\r\n\r\nNot supported method\r\n")))
+  (if (string=? (slot-ref first-line 'method) "GET")
+    (create-file-content-response (slot-ref first-line 'path))
+    "HTTP/1.1 400 Bad Request\r\nContent-Length: 22\r\n\r\nNot supported method\r\n"))
 
 (define (handler sock)
   (let ((recv (socket-recv sock 1024)))
