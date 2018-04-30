@@ -2,12 +2,18 @@
 
 (use gauche.record)
 
-(define-record-type idol #t #t '(name age))
+(define header '())
+(define bodies '())
+
 (let ((data (file->csv "csv/idols.csv")))
-  (let ((header (car data)) (bodies (cdr data)))
-    (let loop ([bs bodies])
-      (if (not (null? bs))
-        (let ((b (car bs)))
-          (let ((idol (make-idol b)))
-            (display idol)(newline)
-            (loop (cdr bs))))))))
+  (set! header (car data))
+  (set! bodies (cdr data)))
+
+(define-record-type idol #t #t header)
+
+(let loop ([bs bodies])
+  (if (not (null? bs))
+    (let ((b (car bs)))
+      (let ((idol (make-idol b)))
+        (display idol)(newline)
+        (loop (cdr bs))))))
