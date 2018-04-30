@@ -1,5 +1,3 @@
-(define-module CSV
-
 (use file.util)
 (use srfi-13)
 
@@ -12,4 +10,3 @@
 (define (file->csv filename)
   (let ((text (file->string filename)))
     (parse-csv text)))
-)
