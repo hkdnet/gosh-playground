@@ -7,4 +7,7 @@
 (define (parse-csv text)
   (let ((lines (to-lines text)))
     (map (lambda (line) (string-split line ",")) lines)))
+(define (file->csv filename)
+  (let ((text (file->string filename)))
+    (parse-csv text)))
 )
